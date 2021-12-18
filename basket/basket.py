@@ -33,6 +33,7 @@ class Basket():
         product_ids = self.basket.keys()
         products = Product.products.filter(id__in=product_ids)
         basket = self.basket.copy()
+        
         for product in products:
             basket[str(product.id)]['product'] = product
         for item in basket.values():
