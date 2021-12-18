@@ -64,46 +64,60 @@
   </div>
 </main>
 <script>
-  //delete item from basket
-  $(document).on('click', '.delete-button', function (e) {
+  // Delete Item
+  $(document).on("click", ".delete-button", function (e) {
     e.preventDefault();
-    var prodid = $(this).data('index');
+    var prodid = $(this).data("index");
     $.ajax({
-      type: 'POST',
+      type: "POST",
       url: '{% url "basket:basket_delete" %}',
       data: {
-        productid: $(this).data('index'),
+        productid: $(this).data("index"),
         csrfmiddlewaretoken: "{{csrf_token}}",
-        action: 'post'
+        action: "post",
       },
       success: function (json) {
         $('.product-item[data-index="' + prodid + '"]').remove();
-        document.getElementById("subtotal").innerHTML = json.subtotal;
-        document.getElementById("basket-qty").innerHTML = json.qty
-      },
-      error: function (xhr, errmsg, err) {}
-    });
-  })
 
-  //update item from basket
-  $(document).on('click', '.update-button', function (e) {
+          if(json.qty == 0){
+            total = 0
+            subtotal = 0
+          }
+          else{
+            total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
+            subtotal = json.subtotal
+          }
+
+        document.getElementById("subtotal").innerHTML = subtotal;
+        document.getElementById("basket-qty").innerHTML = json.qty;
+        document.getElementById("total").innerHTML = total;
+      },
+      error: function (xhr, errmsg, err) {},
+    });
+  });
+
+  // Update Item
+  $(document).on("click", ".update-button", function (e) {
     e.preventDefault();
-    var prodid = $(this).data('index');
+    var prodid = $(this).data("index");
     $.ajax({
-      type: 'POST',
+      type: "POST",
       url: '{% url "basket:basket_update" %}',
       data: {
-        productid: $(this).data('index'),
-        productqty: $('#select' + prodid + ' option:selected').text(),
+        productid: $(this).data("index"),
+        productqty: $("#select" + prodid + " option:selected").text(),
         csrfmiddlewaretoken: "{{csrf_token}}",
-        action: 'post'
+        action: "post",
       },
       success: function (json) {
-        document.getElementById("basket-qty").innerHTML = json.qty
-        document.getElementById("subtotal").innerHTML = json.subtotal
+
+        total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
+        document.getElementById("basket-qty").innerHTML = json.qty;
+        document.getElementById("subtotal").innerHTML = json.subtotal;
+        document.getElementById("total").innerHTML = total;
       },
-      error: function (xhr, errmsg, err) {}
+      error: function (xhr, errmsg, err) {},
     });
-  })
+  });
 </script>
 {% endblock %}
