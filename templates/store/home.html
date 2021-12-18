@@ -1,0 +1,85 @@
+{% extends "./base.html" %}
+{% load static %}
+{% block title%}BookStore{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static "css/slideShow.css" %}">
+<div class="w-25 p-3"></div>
+<main>
+    {% for product in products %}
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <div class="numbertext text-info ">
+                <h3><b> {{ forloop.counter }} / {{ products.count }}</b></h3>
+            </div>
+            <img src="{{ product.image.url }}" style="width:30%">
+            <div class="text text-info">
+                <h1><b>{{ product.title }}:</b></h1>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div style="text-align:center">
+        {% for product in products %}
+        <span class="dot"></span>
+        {% endfor %}
+    </div>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            {% if count <= 1 %}
+            <div class="pb-3 h5">All Books ({{ products.count }} book)</div>
+            {% else %}
+            <div class="pb-3 h5">All Books ({{ products.count }} books)</div>
+            {% endif %}
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+
+                {% for product in products %}
+
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img class="img-fluid" alt="Responsive image" src="{{ product.image.url }}">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <a class="text-dark text-decoration-none"
+                                    href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ product.price }}€</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    var slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("dot");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {
+            slideIndex = 1
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        setTimeout(showSlides, 2000);
+    }
+</script>
+
+{% endblock %}
