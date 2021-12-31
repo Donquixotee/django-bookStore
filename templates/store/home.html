@@ -6,15 +6,22 @@
 <link rel="stylesheet" href="{% static "css/slideShow.css" %}">
 <div class="w-25 p-3"></div>
 <main>
+    {% comment %} this is for the slide show in home page right after the navBar {% endcomment %}
     {% for product in products %}
     <div class="slideshow-container">
         <div class="mySlides fade">
-            <div class="numbertext text-info ">
+            <div class="numbertext " style="color:blue;">
                 <h3><b> {{ forloop.counter }} / {{ products.count }}</b></h3>
             </div>
             <img src="{{ product.image.url }}" style="width:30%">
-            <div class="text text-info">
-                <h1><b>{{ product.title }}:</b></h1>
+            <div class="text text-dark">
+                <h1>
+                    <p><b>{{ product.title }}:<br>
+                            <div class="wrapper">
+                                <p class="demo-1">{{ product.description }}</p>
+                            </div>
+                        </b></p>
+                </h1>
             </div>
         </div>
     </div>
@@ -24,7 +31,7 @@
         <span class="dot"></span>
         {% endfor %}
     </div>
-
+    {% comment %} end slide show {% endcomment %}
     <div class="album py-5 bg-light">
         <div class="container">
 
