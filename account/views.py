@@ -8,18 +8,17 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 
-from .forms import RegistrationForm, UserEditForm
+from .forms import RegistrationForm
 from .models import UserBase
 from .token import account_activation_token
 
 
 def account_register(request):
 
-    if request.user.is_authenticated:
-        return redirect('/')
-
+    # if request.user.is_authenticated:
+    #     return redirect('/')
+    registerForm = RegistrationForm(request.POST)
     if request.method == 'POST':
-        registerForm = RegistrationForm(request.POST)
         if registerForm.is_valid():
             user = registerForm.save(commit=False)
             user.email = registerForm.cleaned_data['email']
@@ -36,3 +35,6 @@ def account_register(request):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject=subject, message=message)
+    else:
+        resgisterForm =RegistrationForm()
+    return render(request, 'account/regestration/register.html', {'form': registerForm})
